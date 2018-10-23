@@ -45,21 +45,12 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
-
       - run:
           name: verify git tag vs. version
           command: |
             python3 -m venv venv
             . venv/bin/activate
             python setup.py verify
-            pip install twine
-
-      - save_cache:
-          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
-          paths:
-          - "venv"
 
       # Deploying to PyPI
       # for pip install kor2vec
@@ -79,6 +70,7 @@ jobs:
           name: upload to pypi
           command: |
             . venv/bin/activate
+            pip install twine
             twine upload dist/*
 workflows:
   version: 2
