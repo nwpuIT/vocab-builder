@@ -22,7 +22,8 @@ class Vocab(TorchVocab):
         super().__init__(counter, specials=["<pad>", "<unk>", "<eos>", "<sos>", "<mask>"],
                          max_size=max_size, min_freq=min_freq)
 
-    def to_seq(self, sentence: str, seq_len: int = None, with_eos=False, with_sos=False, with_len=False) -> list:
+    def to_seq(self, sentence: str, seq_len: int = None, with_eos=False, with_sos=False, with_len=False,
+               mid_pad=False) -> list:
         tokens = self.tokenizer(sentence)
         seq = [self.stoi.get(c, self.unk_index) for c in tokens]
 
@@ -36,7 +37,12 @@ class Vocab(TorchVocab):
         if seq_len is None:
             pass
         elif len(seq) <= seq_len:
-            seq += [self.pad_index for _ in range(seq_len - len(seq))]
+            if not mid_pad:
+                seq += [self.pad_index for _ in range(seq_len - len(seq))]
+            else:
+                front_pad = [self.pad_index for _ in range(int((seq_len - len(seq)) / 2))]
+                end_path = [self.pad_index for _ in range(seq_len - len(seq) - len(front_pad))]
+                seq = front_pad + seq + end_path
         else:
             seq = seq[:seq_len]
 
@@ -47,7 +53,7 @@ class Vocab(TorchVocab):
                   if idx < len(self.itos)
                   else "<%d>" % idx
                   for idx in seq
-                  if not with_pad or idx != self.pad_index]
+                  if with_pad or idx != self.pad_index]
 
         return self.joiner(tokens) if join else tokens
 
