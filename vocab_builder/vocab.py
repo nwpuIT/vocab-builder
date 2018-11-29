@@ -1,15 +1,11 @@
 import pickle
-import tqdm
 
 from collections import Counter
 from .base import TorchVocab
 
-from multiprocessing import Pool
-import functools
-
 
 class Vocab(TorchVocab):
-    def __init__(self, texts, max_size=None, min_freq=1, num_workers=1):
+    def __init__(self, texts, max_size=None, min_freq=1):
         self.pad_index = 0
         self.unk_index = 1
         self.eos_index = 2

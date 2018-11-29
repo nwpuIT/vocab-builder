@@ -1,6 +1,6 @@
 def build():
     import argparse
-    from .vocab import WordVocab
+    from .word import WordVocab
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--corpus_path", required=True, type=str)

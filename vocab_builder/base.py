@@ -1,4 +1,3 @@
-
 class TorchVocab(object):
     """Defines a vocabulary object that will be used to numericalize a field.
     Attributes:
