@@ -2,6 +2,7 @@ import pickle
 
 from collections import Counter
 from .base import TorchVocab
+from tqdm import tqdm
 
 
 class Vocab(TorchVocab):
@@ -14,7 +15,7 @@ class Vocab(TorchVocab):
 
         print("Building Vocab")
         counter = Counter()
-        for text in texts:
+        for text in tqdm(texts):
             tokens = self.tokenizer(text)
             for token in tokens:
                 counter[token] += 1
